@@ -9,6 +9,7 @@ const postSchema = mongoose.Schema({
     language: String,
     category: String,
     titleImage: String,
+    characters: String,
     pages: [String],
     likeCount: {
         type: Number, 
@@ -18,7 +19,7 @@ const postSchema = mongoose.Schema({
         type: Date,
         default: new Date()
     }
-});
+})
 
 const postMessage = mongoose.model('postMessage', postSchema);
 
