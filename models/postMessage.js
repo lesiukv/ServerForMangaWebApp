@@ -9,7 +9,7 @@ const postSchema = mongoose.Schema({
     language: String,
     category: String,
     titleImage: String,
-    characters: String,
+    characters: [String],
     pages: [String],
     likeCount: {
         type: Number, 
