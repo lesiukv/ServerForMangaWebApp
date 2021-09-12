@@ -22,7 +22,7 @@ export const getPostDetails = async (req, res) => {
 }
 
 export const createPost = async (req, res) => {
-    const { title, parodie, tags, artists, group, language, category, titleImage, pages } = req.body;
+    const { title, parodie, tags, artists, group, language, category, titleImage, characters, pages } = req.body;
 
     const newPostMessage = new postMessage({ title, parodie, tags, artists, group, language, category, titleImage, characters, pages });
 
