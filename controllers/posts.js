@@ -1,60 +1,80 @@
-import postMessage from '../models/postMessage.js';
+import postMessage from "../models/postMessage.js";
 
 export const getPosts = async (req, res) => {
-
-    try {
-        const postMessages = await postMessage.find();
-        res.status(200).json(postMessages);
-    } catch (error) {
-        res.status(404).json({message: error});  
-    }
-}
+  try {
+    const postMessages = await postMessage.find();
+    res.status(200).json(postMessages);
+  } catch (error) {
+    res.status(404).json({ message: error });
+  }
+};
 
 export const getPostDetails = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const postMessage = await postMessage.find(p => id === p._id);
+  try {
+    const { id } = req.params;
+    const postMessage = await postMessage.find((p) => id === p._id);
 
-        res.status(200).json(postMessage);
-    } catch (error) {
-        res.status(404).json({ message: error });
-    }
-}
+    res.status(200).json(postMessage);
+  } catch (error) {
+    res.status(404).json({ message: error });
+  }
+};
 
 export const createPost = async (req, res) => {
-    const { title, parodie, tags, artists, group, language, category, titleImage, characters, pages } = req.body;
+  const {
+    title,
+    parodie,
+    tags,
+    artists,
+    group,
+    language,
+    category,
+    titleImage,
+    characters,
+    pages,
+  } = req.body;
 
-    const newPostMessage = new postMessage({ title, parodie, tags, artists, group, language, category, titleImage, characters, pages });
+  const newPostMessage = new postMessage({
+    title,
+    parodie,
+    tags,
+    artists,
+    group,
+    language,
+    category,
+    titleImage,
+    characters,
+    pages,
+  });
 
-
-    try {
-        await newPostMessage.save();    
-        res.status(201).json(newPostMessage);
-    } catch (error) {
-        res.status(409).json( { message: error });
-    }
-}
+  try {
+    await newPostMessage.save();
+    res.status(201).json(newPostMessage);
+  } catch (error) {
+    res.status(409).json({ message: error });
+  }
+};
 
 export const deletePost = async (req, res) => {
-    try {
-        const { id } = req.params;
-        await postMessage.findByIdAndDelete(id);
-        res.json('Post successfully deleted');
-        
-    } catch (error) {
-        res.status(404).json(error);
-    }
-}
+  try {
+    const { id } = req.params;
+    await postMessage.findByIdAndDelete(id);
+    res.json("Post successfully deleted");
+  } catch (error) {
+    res.status(404).json(error);
+  }
+};
 
 export const updatePost = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const updatedData = req.body;
+  try {
+    const { id } = req.params;
+    const updatedData = req.body;
 
-        const updatedPost = await postMessage.findByIdAndUpdate(id, updatedData, {new: true});
-        res.json(updatedPost);
-
-    } catch (error) {
-        res.status(404).json(error);
-    }
-}
+    const updatedPost = await postMessage.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+    res.json(updatedPost);
+  } catch (error) {
+    res.status(404).json(error);
+  }
+};
