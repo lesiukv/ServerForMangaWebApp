@@ -10,7 +10,10 @@ const postSchema = mongoose.Schema({
   category: String,
   titleImage: String,
   characters: [String],
-  pages: [String],
+  pages: [{
+    name: String,
+    path: String,
+  }],
   likeCount: {
     type: Number,
     default: 0,
