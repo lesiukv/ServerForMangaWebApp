@@ -21,7 +21,7 @@ export const getPostDetails = async (req, res) => {
 };
 
 export const createPost = async (req, res) => {
-  const {
+  let {
     title,
     parodie,
     tags,
@@ -54,6 +54,8 @@ export const createPost = async (req, res) => {
     res.status(409).json({ message: error });
   }
 };
+
+
 
 export const deletePost = async (req, res) => {
   try {
