@@ -11,8 +11,7 @@ const postSchema = mongoose.Schema({
   titleImage: String,
   characters: [String],
   pages: [{
-    name: String,
-    path: String,
+    dest: String,
   }],
   likeCount: {
     type: Number,
