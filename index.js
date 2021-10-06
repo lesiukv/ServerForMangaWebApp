@@ -10,6 +10,8 @@ app.use(express.urlencoded({ limit: "30mb", extend: true }));
 app.use(cors());
 app.use("/posts", postRoutes);
 
+app.use("/uploads", express.static("../uploads"));
+
 const CONNECTION_URL =
   "mongodb+srv://pan_kit:12341234@cluster0.u6uy1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
