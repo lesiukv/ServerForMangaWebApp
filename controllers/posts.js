@@ -29,7 +29,6 @@ export const createPost = async (req, res) => {
     group,
     language,
     category,
-    titleImage,
     characters,
     pages,
   } = req.body;
@@ -42,7 +41,6 @@ export const createPost = async (req, res) => {
     group,
     language,
     category,
-    titleImage,
     characters,
     pages,
   });
@@ -54,8 +52,6 @@ export const createPost = async (req, res) => {
     res.status(409).json({ message: error });
   }
 };
-
-
 
 export const deletePost = async (req, res) => {
   try {
@@ -71,7 +67,6 @@ export const updatePost = async (req, res) => {
   try {
     const { id } = req.params;
     const updatedData = req.body;
-
     const updatedPost = await postMessage.findByIdAndUpdate(id, updatedData, {
       new: true,
     });

@@ -8,7 +8,6 @@ const postSchema = mongoose.Schema({
   group: String,
   language: String,
   category: String,
-  titleImage: String,
   characters: [String],
   pages: [{
     dest: String,
