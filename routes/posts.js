@@ -12,9 +12,7 @@ const router = express.Router();
 
 router.get("/", getPosts);
 router.post("/", createPost);
-router.post("/uploads", upload.array('page'), (req, res) => {
-  console.log(req.files, 'files')
-});
+router.post("/uploads", upload.array('page'));
 router.get("/:id", getPostDetails);
 router.delete("/:id", deletePost);
 router.patch("/:id", updatePost);
