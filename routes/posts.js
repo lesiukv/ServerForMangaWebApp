@@ -6,13 +6,15 @@ import {
   deletePost,
   updatePost,
 } from "../controllers/posts.js";
+import { getTopics } from "../controllers/topics.js";
 import { upload } from "../middleware/multer.js";
 
 const router = express.Router();
 
 router.get("/", getPosts);
+router.get("/topics", getTopics);
 router.post("/", createPost);
-router.post("/uploads", upload.array('page'));
+router.post("/uploads", upload.array("page"));
 router.get("/:id", getPostDetails);
 router.delete("/:id", deletePost);
 router.patch("/:id", updatePost);
