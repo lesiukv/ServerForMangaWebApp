@@ -5,7 +5,7 @@ export const getPosts = async (req, res) => {
     const postMessages = await postMessage.find();
     res.status(200).json(postMessages);
   } catch (error) {
-    res.status(404).json({ message: error });
+    res.status(404).json(`${error}`);
   }
 };
 
@@ -16,7 +16,7 @@ export const getPostDetails = async (req, res) => {
 
     res.status(200).json(postMessage);
   } catch (error) {
-    res.status(404).json({ message: error });
+    res.status(404).json(`${error}`);
   }
 };
 
@@ -50,7 +50,7 @@ export const createPost = async (req, res) => {
     console.log(newPostMessage);
     res.status(201).json(newPostMessage);
   } catch (error) {
-    res.status(409).json({ message: error });
+    res.status(409).json(`${error}`);
   }
 };
 
@@ -60,7 +60,7 @@ export const deletePost = async (req, res) => {
     await postMessage.findByIdAndDelete(id);
     res.json("Post successfully deleted");
   } catch (error) {
-    res.status(404).json(error);
+    res.status(404).json(`${error}`);
   }
 };
 
@@ -73,6 +73,6 @@ export const updatePost = async (req, res) => {
     });
     res.json(updatedPost);
   } catch (error) {
-    res.status(404).json(error);
+    res.status(404).json(`${error}`);
   }
 };
