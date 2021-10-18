@@ -24,7 +24,6 @@ export const getTopics = async (req, res) => {
 
 const countTopics = (value, postMessages, topic) => {
   let topicsNumber = 0;
-  console.log("countTopics", value, topic)
   postMessages.forEach((element) => {
     if (Array.isArray(element[topic])) {
       element[topic].forEach((subElement) => {
@@ -38,25 +37,21 @@ const countTopics = (value, postMessages, topic) => {
   return topicsNumber;
 };
 
-
 export const getTopicsNumber = async (req, res) => {
   try {
     const topic = req.body;
-
-    console.log("reqblya",req);
-
     const postMessages = await postMessage.find();
     let topicsNumber = {};
 
     Object.keys(topic).map((key, index) => {
-      topicsNumber[topic] = [];
+      topicsNumber[key] = [];
 
       if (Array.isArray(topic[key])) {
         topic[key].forEach((element) => {
-          topicsNumber[topic].push(countTopics(element, postMessages, key));
+          topicsNumber[key].push(countTopics(element, postMessages, key));
         });
       } else {
-        topicsNumber[topic].push(countTopics(topic[key], postMessages, key));
+        topicsNumber[key].push(countTopics(topic[key], postMessages, key));
       }
     });
 
