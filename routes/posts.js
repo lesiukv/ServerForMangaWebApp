@@ -18,7 +18,7 @@ router.post("/", createPost);
 router.post("/uploads", upload.array("page"), postPages);
 router.get("/:id", getPostDetails);
 router.delete("/:id", deletePost);
-router.get("/topics/amount", getTopicsNumber);
+router.patch("/topics/amount", getTopicsNumber);
 router.patch("/:id", updatePost);
 
 export default router;
