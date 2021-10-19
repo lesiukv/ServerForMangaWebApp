@@ -1,27 +1,5 @@
 import postMessage from "../models/postMessage.js";
 
-export const getTopics = async (req, res) => {
-  try {
-    const { topic } = req.params;
-    const postMessages = await postMessage.find();
-    let tempUniqueValuesOfTopics = {};
-    let uniqueValuesOfTopics = {};
-
-    tempUniqueValuesOfTopics[topic] = [
-      ...new Set(postMessages.map((post) => post[topic])),
-    ];
-
-    uniqueValuesOfTopics[topic] = [].concat(...tempUniqueValuesOfTopics[topic]);
-    uniqueValuesOfTopics[topic] = uniqueValuesOfTopics[topic].filter(
-      (element) => element != ""
-    );
-
-    res.status(200).json(uniqueValuesOfTopics);
-  } catch (error) {
-    res.status(404).json(`${error}`);
-  }
-};
-
 const countTopics = (value, postMessages, topic) => {
   let topicsNumber = 0;
   postMessages.forEach((element) => {
@@ -37,26 +15,57 @@ const countTopics = (value, postMessages, topic) => {
   return topicsNumber;
 };
 
-export const getTopicsNumber = async (req, res) => {
+const getTopicsNumber = (topic, postMessages) => {
+  let topicsNumber = {};
+  Object.keys(topic).map((key, index) => {
+    topicsNumber[key] = [];
+
+    if (Array.isArray(topic[key])) {
+      topic[key].forEach((element) => {
+        topicsNumber[key].push(countTopics(element, postMessages, key));
+      });
+    } else {
+      topicsNumber[key].push(countTopics(topic[key], postMessages, key));
+    }
+  });
+
+  return topicsNumber;
+};
+
+export const getTopic = async (req, res) => {
   try {
-    const topic = req.body;
+    const { topic } = req.params;
     const postMessages = await postMessage.find();
-    let topicsNumber = {};
+    let tempUniqueValuesOfTopics = {};
+    let uniqueValuesOfTopics = {};
+    let topicsArray = [];
 
-    Object.keys(topic).map((key, index) => {
-      topicsNumber[key] = [];
+    tempUniqueValuesOfTopics[topic] = [
+      ...new Set(postMessages.map((post) => post[topic])),
+    ];
 
-      if (Array.isArray(topic[key])) {
-        topic[key].forEach((element) => {
-          topicsNumber[key].push(countTopics(element, postMessages, key));
-        });
-      } else {
-        topicsNumber[key].push(countTopics(topic[key], postMessages, key));
-      }
-    });
+    uniqueValuesOfTopics[topic] = [].concat(...tempUniqueValuesOfTopics[topic]);
+    uniqueValuesOfTopics[topic] = uniqueValuesOfTopics[topic].filter(
+      (element) => element != ""
+    );
 
-    res.json(topicsNumber);
+    topicsArray.push(uniqueValuesOfTopics);
+    topicsArray.push(getTopicsNumber(uniqueValuesOfTopics, postMessages));
+
+    res.status(200).json(topicsArray);
   } catch (error) {
-    res.json(`${error}`);
+    res.status(404).json(`${error}`);
   }
 };
+
+export const getPostDetailsTopics = async (req, res) => {
+  try {
+    const topics = req.body;
+    const postMessages = await postMessage.find();
+    const postDetailsTopics = getTopicsNumber(topics, postMessages);
+
+    res.status(200).json(postDetailsTopics);
+  } catch (error) {
+    res.status(404).json(`${error}`);
+  }
+}
