@@ -13,8 +13,8 @@ import { upload } from "../middleware/multer.js";
 const router = express.Router();
 
 router.get("/", getPosts);
+router.get("/:id", getPostDetails);
 router.post("/", createPost);
-// router.get("/:id", getPostDetails);
 router.delete("/:id", deletePost);
 router.patch("/:id", updatePost);
 
