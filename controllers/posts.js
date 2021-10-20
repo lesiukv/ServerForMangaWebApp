@@ -1,4 +1,5 @@
 import postMessage from "../models/postMessage.js";
+import { getTopicsNumber } from "../logic/topics.js";
 
 export const getPosts = async (req, res) => {
   try {
@@ -12,9 +13,14 @@ export const getPosts = async (req, res) => {
 export const getPostDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    const postMessage = await postMessage.find((p) => id === p._id);
+    const postMessageDetails = await postMessage.findById(id);
+    const postMessages = await postMessage.find();
+    let detailsArray = [];
 
-    res.status(200).json(postMessage);
+    detailsArray.push(postMessageDetails);
+    detailsArray.push(getTopicsNumber(postMessageDetails.toJSON(), postMessages))
+
+    res.status(200).json(detailsArray);
   } catch (error) {
     res.status(404).json(`${error}`);
   }
@@ -47,7 +53,6 @@ export const createPost = async (req, res) => {
 
   try {
     await newPostMessage.save();
-    console.log(newPostMessage);
     res.status(201).json(newPostMessage);
   } catch (error) {
     res.status(409).json(`${error}`);
