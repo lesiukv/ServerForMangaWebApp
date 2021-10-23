@@ -27,15 +27,3 @@ export const getTopic = async (req, res) => {
     res.status(404).json(`${error}`);
   }
 };
-
-export const getPostDetailsTopics = async (req, res) => {
-  try {
-    const topics = req.body;
-    const postMessages = await postMessage.find();
-    const postDetailsTopics = getTopicsNumber(topics, postMessages);
-
-    res.status(200).json(postDetailsTopics);
-  } catch (error) {
-    res.status(404).json(`${error}`);
-  }
-}
