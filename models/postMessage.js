@@ -1,5 +1,14 @@
 import mongoose from "mongoose";
 
+const postComment = mongoose.Schema({
+  author: String,
+  text: String,
+  likeCount: {
+    type: Number,
+    default: 0
+  }
+})
+
 const postSchema = mongoose.Schema({
   title: String,
   parodie: String,
@@ -16,6 +25,7 @@ const postSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  comments: [postComment],
   createdAt: {
     type: Date,
     default: new Date(),
