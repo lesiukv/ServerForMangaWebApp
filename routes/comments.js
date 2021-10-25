@@ -6,12 +6,13 @@ import {
   deleteComment,
   updateComment,
 } from "../controllers/comments.js";
+import express from "express";
 
 const router = express.Router();
 
-router.get("/:id/", getComments);
+router.get("/:id", getComments);
 router.get("/:id/:commentId", getComment);
-router.patch("/:id/", addComment);
+router.post("/:id", addComment);
 router.delete("/:id/", deleteComments);
 router.delete(":id/:commentId", deleteComment);
 router.patch("/:id/:commentId", updateComment);

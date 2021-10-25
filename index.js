@@ -2,12 +2,14 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import postRoutes from "./routes/posts.js";
-import commentRoutes from "./routes/comments";
-import topicRoutes from "./routes/topics";
-import pageRoutes from "./routes/pages";
+import commentRoutes from "./routes/comments.js";
+import topicRoutes from "./routes/topics.js";
+import pageRoutes from "./routes/pages.js";
+import logger from "morgan";
 
 const app = express();
 
+app.use(logger("dev"));
 app.use(express.json({ limit: "30mb", extend: true }));
 app.use(express.urlencoded({ limit: "30mb", extend: true }));
 app.use(cors());
@@ -26,6 +28,6 @@ mongoose
   .then(() =>
     app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
   )
-  .catch((error) => console.log(error));
+  .catch((error) => console.log(`${error}`));
 
 mongoose.set("useFindAndModify", false);
