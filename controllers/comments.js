@@ -53,11 +53,14 @@ export const deleteComments = async (req, res) => {
 export const deleteComment = async (req, res) => {
   try {
     const { id, commentId } = req.params;
-    let post = await postMessage.findById(id);
+    const post = await postMessage.findById(id);
+
     await postMessage.findByIdAndUpdate(
       id,
       post.comments.filter((comment) => comment._id != commentId)
     );
+
+    res.status(200).json("Comment Deleted");
   } catch (error) {
     res.json(`${error}`);
   }
@@ -65,12 +68,22 @@ export const deleteComment = async (req, res) => {
 
 export const updateComment = async (req, res) => {
   try {
-    const { id, commentId} = req.params;
+    const { id, commentId } = req.params;
     const updatedComment = req.body;
-    let post = await postMessage.findById(id);
-    post.comments = updatedComment;
-    await postMessage.findByIdAndUpdate(id, post);
+    const post = await postMessage.findById(id);
+
+    await postMessage.findByIdAndUpdate(
+      id,
+      post.comments.map((comment) => {
+        if (comment._id === commentId) {
+          comment.author = updatedComment.author;
+          comment.comment = updatedComment.comment;
+          return comment;
+        } else return comment;
+      })
+    );
+    res.json(updatedComment);
   } catch (error) {
     res.json(`${error}`);
   }
-}
+};

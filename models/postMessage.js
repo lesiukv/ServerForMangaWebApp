@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const postComment = mongoose.Schema({
   author: String,
-  text: String,
+  comment: String,
   likeCount: {
     type: Number,
     default: 0
