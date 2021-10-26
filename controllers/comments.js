@@ -13,8 +13,9 @@ export const getComments = async (req, res) => {
 export const getComment = async (req, res) => {
   try {
     const { id, commentId } = req.params;
-    const { comments } = await postMessage.findById(id);
-    const comment = comments.find((comment) => comment._id === commentId);
+    const comment = await postMessage.findById(id).then((post) => {
+      return post.comments.id(commentId);
+    });
     res.status(200).json(comment);
   } catch (error) {
     res.status(404).json(`${error}`);
@@ -68,19 +69,15 @@ export const updateComment = async (req, res) => {
   try {
     const { id, commentId } = req.params;
     const updatedComment = req.body;
-    const post = await postMessage.findById(id);
+    let post = await postMessage.findById(id)
 
-    await postMessage.findByIdAndUpdate(
-      id,
-      post.comments.map((comment) => {
-        if (comment._id === commentId) {
-          comment.author = updatedComment.author;
-          comment.comment = updatedComment.comment;
-          return comment;
-        } else return comment;
-      })
-    );
-    res.json(updatedComment);
+    post.comments.id(commentId).author = updatedComment.author;
+    post.comments.id(commentId).comment = updatedComment.comment;
+  
+    await postMessage.findByIdAndUpdate(id, post);
+
+    res.json(post.comments.id(commentId));
+    
   } catch (error) {
     res.json(`${error}`);
   }
