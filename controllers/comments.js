@@ -25,7 +25,7 @@ export const addComment = async (req, res) => {
   try {
     const { id } = req.params;
     let post = await postMessage.findById(id);
-    post.comments.push(req.body);
+    post.comments.unshift(req.body);
     await postMessage.findByIdAndUpdate(id, post);
     res.status(200).json(req.body);
   } catch (error) {
