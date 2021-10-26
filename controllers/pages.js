@@ -1,8 +1,7 @@
 export const postPages = (req, res) => {
   try {
-    res.status(201).json({ message: "SUCCESS" });
+    console.log('Page posted');
   } catch (error) {
-    res.status(409).json({ message: error });
+    console.log(error);
   }
-  res.send({ status: "SUCCESS" });
 };

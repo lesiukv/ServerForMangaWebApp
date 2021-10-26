@@ -4,6 +4,6 @@ import { upload } from "../middleware/multer.js";
 
 const router = express.Router();
 
-router.post("/uploads", upload.array("page"), postPages);
+router.post("/", upload.array("page"), postPages);
 
 export default router;
