@@ -27,7 +27,7 @@ export const addComment = async (req, res) => {
     let post = await postMessage.findById(id);
     post.comments.push(req.body);
     await postMessage.findByIdAndUpdate(id, post);
-    res.status(200).json(post);
+    res.status(200).json(req.body);
   } catch (error) {
     res.json(`${error}`);
   }
@@ -53,14 +53,12 @@ export const deleteComments = async (req, res) => {
 export const deleteComment = async (req, res) => {
   try {
     const { id, commentId } = req.params;
-    const post = await postMessage.findById(id);
-
-    await postMessage.findByIdAndUpdate(
-      id,
-      post.comments.filter((comment) => comment._id != commentId)
-    );
-
-    res.status(200).json("Comment Deleted");
+    await postMessage.findById(id).then((post) => {
+      post.comments.id(commentId).remove();
+      post.save().then(() => {
+        res.status(200).json("Comment Deleted");
+      });
+    });
   } catch (error) {
     res.json(`${error}`);
   }

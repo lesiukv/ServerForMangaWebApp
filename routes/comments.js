@@ -14,7 +14,7 @@ router.get("/:id", getComments);
 router.get("/:id/:commentId", getComment);
 router.post("/:id", addComment);
 router.delete("/:id/", deleteComments);
-router.delete(":id/:commentId", deleteComment);
+router.delete("/:id/:commentId", deleteComment);
 router.patch("/:id/:commentId", updateComment);
 
 export default router;

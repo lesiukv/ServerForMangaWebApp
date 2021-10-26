@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 const postComment = mongoose.Schema({
   author: String,
   comment: String,
+  createdAt: {
+    type: Date,
+    default: new Date()
+  },
   likeCount: {
     type: Number,
     default: 0
