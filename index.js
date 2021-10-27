@@ -6,8 +6,10 @@ import commentRoutes from "./routes/comments.js";
 import topicRoutes from "./routes/topics.js";
 import pageRoutes from "./routes/pages.js";
 import logger from "morgan";
+import dotenv from 'dotenv'
 
 const app = express();
+dotenv.config();
 
 app.use(logger("dev"));
 app.use(express.json({ limit: "30mb", extend: true }));
@@ -18,13 +20,10 @@ app.use("/topics", topicRoutes);
 app.use("/comments", commentRoutes);
 app.use("/uploads", express.static("../uploads"), pageRoutes);
 
-const CONNECTION_URL =
-  "mongodb+srv://pan_kit:12341234@cluster0.u6uy1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-
 const PORT = process.env.PORT || 5000;
 
 mongoose
-  .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() =>
     app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
   )
