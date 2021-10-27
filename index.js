@@ -6,7 +6,7 @@ import commentRoutes from "./routes/comments.js";
 import topicRoutes from "./routes/topics.js";
 import pageRoutes from "./routes/pages.js";
 import logger from "morgan";
-  import dotenv from 'dotenv'
+import dotenv from 'dotenv'
 
 const app = express();
 dotenv.config();
