@@ -1,14 +1,13 @@
 import postMessage from "../models/postMessage.js";
 import { getTopicsNumber } from "../logic/topics.js";
 
-
-export const getTopic = async (req, res) => {
+export const getTopic = async (req, res, next) => {
   try {
     const { topic } = req.params;
     const postMessages = await postMessage.find();
-    let tempUniqueValuesOfTopics = {};
-    let uniqueValuesOfTopics = {};
-    let topicsArray = [];
+    const tempUniqueValuesOfTopics = {};
+    const uniqueValuesOfTopics = {};
+    const topicsArray = [];
 
     tempUniqueValuesOfTopics[topic] = [
       ...new Set(postMessages.map((post) => post[topic])),
@@ -24,6 +23,6 @@ export const getTopic = async (req, res) => {
 
     res.status(200).json(topicsArray);
   } catch (error) {
-    res.status(404).json(`${error}`);
+    next(error);
   }
 };

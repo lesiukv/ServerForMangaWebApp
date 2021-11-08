@@ -18,7 +18,7 @@ export const getToken = (user) => {
   return jwt.sign(user, process.env.SECRET_KEY, { expiresIn: 86400 });
 };
 
-let options = {};
+const options = {};
 
 options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 options.secretOrKey = process.env.SECRET_KEY;

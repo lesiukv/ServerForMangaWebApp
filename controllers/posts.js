@@ -1,32 +1,34 @@
 import postMessage from "../models/postMessage.js";
 import { getTopicsNumber } from "../logic/topics.js";
 
-export const getPosts = async (req, res) => {
+export const getPosts = async (req, res, next) => {
   try {
     const postMessages = await postMessage.find();
     res.status(200).json(postMessages);
   } catch (error) {
-    res.status(404).json(`${error}`);
+    next(error);
   }
 };
 
-export const getPostDetails = async (req, res) => {
+export const getPostDetails = async (req, res, next) => {
   try {
     const { id } = req.params;
     const postMessageDetails = await postMessage.findById(id);
     const postMessages = await postMessage.find();
-    let detailsArray = [];
+    const detailsArray = [];
 
     detailsArray.push(postMessageDetails);
-    detailsArray.push(getTopicsNumber(postMessageDetails.toJSON(), postMessages))
+    detailsArray.push(
+      getTopicsNumber(postMessageDetails.toJSON(), postMessages)
+    );
 
     res.status(200).json(detailsArray);
   } catch (error) {
-    res.status(404).json(`${error}`);
+    next(error);
   }
 };
 
-export const createPost = async (req, res) => {
+export const createPost = async (req, res, next) => {
   let {
     title,
     parodie,
@@ -55,21 +57,21 @@ export const createPost = async (req, res) => {
     await newPostMessage.save();
     res.status(201).json(newPostMessage);
   } catch (error) {
-    res.status(409).json(`${error}`);
+    next(error);
   }
 };
 
-export const deletePost = async (req, res) => {
+export const deletePost = async (req, res, next) => {
   try {
     const { id } = req.params;
     await postMessage.findByIdAndDelete(id);
     res.json("Post successfully deleted");
   } catch (error) {
-    res.status(404).json(`${error}`);
+    next(error);
   }
 };
 
-export const updatePost = async (req, res) => {
+export const updatePost = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updatedData = req.body;
@@ -78,6 +80,6 @@ export const updatePost = async (req, res) => {
     });
     res.json(updatedPost);
   } catch (error) {
-    res.status(404).json(`${error}`);
+    next(error);
   }
 };

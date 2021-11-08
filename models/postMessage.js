@@ -1,18 +1,5 @@
 import mongoose from "mongoose";
 
-const postComment = mongoose.Schema({
-  author: String,
-  comment: String,
-  createdAt: {
-    type: Date,
-    default: new Date()
-  },
-  likeCount: {
-    type: Number,
-    default: 0
-  }
-})
-
 const postSchema = mongoose.Schema({
   title: String,
   parodie: String,
@@ -29,12 +16,15 @@ const postSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
-  comments: [postComment],
-  createdAt: {
-    type: Date,
-    default: new Date(),
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
   },
-});
+  comments: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Comment',
+  }
+}, { timestamp: true });
 
 const postMessage = mongoose.model("postMessage", postSchema);
 

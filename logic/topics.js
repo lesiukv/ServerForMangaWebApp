@@ -14,7 +14,7 @@ export const countTopics = (value, postMessages, topic) => {
   };
   
 export const getTopicsNumber = (topic, postMessages) => {
-    let topicsNumber = {};
+    const topicsNumber = {};
     Object.keys(topic).map((key, index) => {
       topicsNumber[key] = [];
   
