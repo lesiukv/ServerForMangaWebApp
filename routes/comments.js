@@ -7,14 +7,15 @@ import {
   updateComment,
 } from "../controllers/comments.js";
 import express from "express";
+import { verifyUser } from "../authenticate.js";
 
 const router = express.Router();
 
-router.get("/:id", getComments);
-router.get("/:id/:commentId", getComment);
-router.post("/:id", addComment);
-router.delete("/:id/", deleteComments);
-router.delete("/:id/:commentId", deleteComment);
-router.patch("/:id/:commentId", updateComment);
+router.get("/:id", verifyUser, getComments);
+router.get("/:id/:commentId", verifyUser, getComment);
+router.post("/:id", verifyUser, addComment);
+router.delete("/:id/", verifyUser, deleteComments);
+router.delete("/:id/:commentId", verifyUser, deleteComment);
+router.patch("/:id/:commentId", verifyUser, updateComment);
 
 export default router;

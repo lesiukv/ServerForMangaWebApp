@@ -6,6 +6,7 @@ import commentRoutes from "./routes/comments.js";
 import topicRoutes from "./routes/topics.js";
 import pageRoutes from "./routes/pages.js";
 import userRoutes from "./routes/users.js";
+import favoriteRouter from "./routes/favorites.js";
 import logger from "morgan";
 import dotenv from "dotenv";
 import passport from "passport";
@@ -29,6 +30,7 @@ app.use("/topics", topicRoutes);
 app.use("/comments", commentRoutes);
 app.use("/uploads", express.static("../uploads"), pageRoutes);
 app.use("/users", userRoutes);
+app.use("/favorite", favoriteRouter);
 
 const PORT = process.env.PORT || 5000;
 

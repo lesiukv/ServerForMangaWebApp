@@ -6,13 +6,14 @@ import {
   deletePost,
   updatePost,
 } from "../controllers/posts.js";
+import { verifyAdmin } from "../authenticate.js";
 
 const router = express.Router();
 
 router.get("/", getPosts);
 router.get("/:id", getPostDetails);
-router.post("/", createPost);
-router.delete("/:id", deletePost);
-router.patch("/:id", updatePost);
+router.post("/", verifyAdmin, createPost);
+router.delete("/:id", verifyAdmin, deletePost);
+router.patch("/:id", verifyAdmin, updatePost);
 
 export default router;
