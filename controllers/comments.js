@@ -1,12 +1,10 @@
 import postMessage from "../models/postMessage.js";
 import Comments from "../models/Comments.js";
 
-export const getComments = async (req, res, netx) => {
+export const getComments = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const comments = await Comments.find({ post: id })
-      .populate("author")
-    console.log(comments);
+    const comments = await Comments.find({ post: id }).populate("author");
     res.status(200).json(comments);
   } catch (error) {
     next(error);
@@ -15,10 +13,8 @@ export const getComments = async (req, res, netx) => {
 
 export const getComment = async (req, res, next) => {
   try {
-    const { id, commentId } = req.params;
-    const comment = await postMessage.findById(id).then((post) => {
-      return post.comments.id(commentId);
-    });
+    const { commentId } = req.params;
+    const comment = await Comments.findById(commentId);
     res.status(200).json(comment);
   } catch (error) {
     next(error);
@@ -38,30 +34,28 @@ export const addComment = async (req, res, next) => {
 
 export const deleteComments = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const post = await postMessage.findById(id);
-
-    for (let i = 0; i < post.comments.length; i++) {
-      post.comments.id(post.comments[i]._id).remove();
-    }
-
-    await postMessage.findByIdAndUpdate(id, post);
-
-    res.status(200).json(post);
+    const { postId } = req.params;
+    await Comments.deleteMany({ post: postId });
+    res.status(200).json("Comments removed successfully");
   } catch (error) {
     next(error);
   }
 };
 
+const isThisAccount = async (userId, commentId) => {
+  const comment = await Comments.findById(commentId);
+  return comment?.author === userId;
+};
+
 export const deleteComment = async (req, res, next) => {
   try {
-    const { id, commentId } = req.params;
-    await postMessage.findById(id).then((post) => {
-      post.comments.id(commentId).remove();
-      post.save().then(() => {
-        res.status(200).json("Comment Deleted");
-      });
-    });
+    const { commentId } = req.params;
+    if (isThisAccount(req.user._id, commentId)) {
+      await Comments.findByIdAndDelete(commentId);
+      res.status(200).json("Comment removed successfully");
+    } else {
+      res.status(403).json("You are not allowed to delete this comment");
+    }
   } catch (error) {
     next(error);
   }
@@ -69,16 +63,17 @@ export const deleteComment = async (req, res, next) => {
 
 export const updateComment = async (req, res, next) => {
   try {
-    const { id, commentId } = req.params;
+    const { commentId } = req.params;
     const updatedComment = req.body;
-    const post = await postMessage.findById(id);
-
-    post.comments.id(commentId).author = updatedComment.author;
-    post.comments.id(commentId).comment = updatedComment.comment;
-
-    await postMessage.findByIdAndUpdate(id, post);
-
-    res.json(post.comments.id(commentId));
+    if (isThisAccount(req.user._id == commentId)) {
+      const comment = await Comments.findByIdAndUpdate(
+        commentId,
+        updatedComment
+      );
+      res.status(200).json(comment);
+    } else {
+      res.status(403).json("You are not allowed to update this comment");
+    }
   } catch (error) {
     next(error);
   }

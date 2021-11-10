@@ -2,7 +2,6 @@ import postMessage from "../models/postMessage.js";
 
 export const postPages = (req, res, next) => {
   try {
-    console.log("Page Posted");
     res.status(200).json("Page Posted");
   } catch (error) {
     next(error);
