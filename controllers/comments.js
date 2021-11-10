@@ -1,9 +1,12 @@
 import postMessage from "../models/postMessage.js";
+import Comments from "../models/Comments.js";
 
 export const getComments = async (req, res, netx) => {
   try {
     const { id } = req.params;
-    const { comments } = await postMessage.findById(id);
+    const comments = await Comments.find({ post: id })
+      .populate("author")
+    console.log(comments);
     res.status(200).json(comments);
   } catch (error) {
     next(error);
@@ -25,10 +28,9 @@ export const getComment = async (req, res, next) => {
 export const addComment = async (req, res, next) => {
   try {
     const { id } = req.params;
-    let post = await postMessage.findById(id);
-    post.comments.unshift(req.body);
-    await postMessage.findByIdAndUpdate(id, post);
-    res.status(200).json(req.body);
+    const comment = await Comments.create({ ...req.body, post: id });
+    console.log(comment);
+    res.status(200).json(comment);
   } catch (error) {
     next(error);
   }

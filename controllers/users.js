@@ -60,6 +60,8 @@ export const loginUser = async (req, res, next) => {
         token: token,
         success: true,
         status: 200,
+        userId: req.user._id,
+        username: req.user.username,
       });
     })(req, res, next);
   } catch (error) {

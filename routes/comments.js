@@ -11,7 +11,7 @@ import { verifyUser } from "../authenticate.js";
 
 const router = express.Router();
 
-router.get("/:id", verifyUser, getComments);
+router.get("/:id", getComments);
 router.get("/:id/:commentId", verifyUser, getComment);
 router.post("/:id", verifyUser, addComment);
 router.delete("/:id/", verifyUser, deleteComments);
