@@ -25,7 +25,6 @@ export const addComment = async (req, res, next) => {
   try {
     const { id } = req.params;
     const comment = await Comments.create({ ...req.body, post: id });
-    console.log(comment);
     res.status(200).json(comment);
   } catch (error) {
     next(error);
@@ -43,8 +42,8 @@ export const deleteComments = async (req, res, next) => {
 };
 
 const isThisAccount = async (userId, commentId) => {
-  const comment = await Comments.findById(commentId);
-  return comment?.author === userId;
+  const comment = Comments.findById(commentId);
+  return comment.author === userId;
 };
 
 export const deleteComment = async (req, res, next) => {
