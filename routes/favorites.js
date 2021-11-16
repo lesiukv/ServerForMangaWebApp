@@ -8,7 +8,7 @@ import { verifyUser, verifyAdmin } from "../authenticate.js";
 
 const router = express.Router();
 
-router.get("/", verifyAdmin, getFavoritesList);
+router.get("/", verifyUser, getFavoritesList);
 router.post("/:postId", verifyUser, addFavorite);
 router.delete("/:postId", verifyUser, deleteFavorite);
 

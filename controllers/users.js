@@ -72,6 +72,7 @@ export const loginUser = async (req, res, next) => {
         status: 200,
         userId: req.user._id,
         username: req.user.username,
+        admin: req.user.admin
       });
     })(req, res, next);
   } catch (error) {

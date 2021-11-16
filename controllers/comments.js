@@ -1,4 +1,3 @@
-import postMessage from "../models/postMessage.js";
 import Comments from "../models/Comments.js";
 
 export const getComments = async (req, res, next) => {
