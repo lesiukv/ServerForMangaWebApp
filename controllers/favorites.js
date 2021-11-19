@@ -3,8 +3,9 @@ import Favorites from "../models/favorites.js";
 export const getFavoritesList = async (req, res, next) => {
   try {
     const getFavorite = await Favorites.find({ user: req.user._id })
-      .populate("posts")
-    res.status(200).json(getFavorite);
+      .populate("posts");
+    const [data] = getFavorite;
+    res.status(200).json(data);
   } catch (error) {
     next(error);
   }
