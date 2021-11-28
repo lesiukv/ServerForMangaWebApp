@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
 const postSchema = mongoose.Schema({
-  title: String,
-  parodie: String,
+  title: [String],
+  parodie: [String],
   tags: [String],
   artists: [String],
-  group: String,
-  language: String,
-  category: String,
+  group: [String],
+  language: [String],
+  category: [String],
   characters: [String],
   pages: [{
     dest: String,
