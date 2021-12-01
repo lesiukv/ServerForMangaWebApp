@@ -27,10 +27,10 @@ export const getPostDetails = async (req, res, next) => {
       "characters",
     ];
 
-    for (const topic in postDetailsKeys) {
+    for (const topic of postDetailsKeys) {
       countObject[topic] = [];
 
-      for (const value in postDetails[topic]) {
+      for (const value of postDetails[topic]) {
         countObject[topic].push(
           await postMessage.find({ [topic]: { $in: value } }).count()
         );
