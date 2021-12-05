@@ -1,4 +1,5 @@
 import postMessage from "../models/postMessage.js";
+import fs from "fs";
 
 export const postPages = (req, res, next) => {
   try {
@@ -15,4 +16,14 @@ export const getPages = (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
+
+export const removePage = async (req, res, next) => {
+  try {
+    const { pageId } = req.params;
+    fs.unlinkSync(`../uploads/${pageId}`);
+    res.status(200).json(`Pages #${pageId} successfully removed`);
+  } catch (error) {
+    next(error);
+  }
+};

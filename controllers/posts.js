@@ -1,4 +1,5 @@
 import postMessage from "../models/postMessage.js";
+import fs from "fs";
 
 export const getPosts = async (req, res, next) => {
   try {
@@ -79,6 +80,12 @@ export const createPost = async (req, res, next) => {
 export const deletePost = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { pages } = await postMessage.findById(id);
+
+    for (const page of pages) {
+      fs.unlinkSync(`../uploads/${page.dest}`);
+    }
+
     await postMessage.findByIdAndDelete(id);
     res.json("Post successfully deleted");
   } catch (error) {
