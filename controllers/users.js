@@ -19,19 +19,24 @@ export const getUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const signupUser = async (req, res, next) => {
   try {
-    await Users.register(
+    Users.register(
       new Users({ username: req.body.username }),
       req.body.password,
       (err, user) => {
         if (err) {
-          res.json({ error: err });
+          res.json({ error: err, success: false });
         } else {
-          passport.authenticate("local")(req, res, () => {
-            res.json({ status: 200, success: true });
+          user.save((err, user) => {
+            if (err) {
+              res.json({ error: err, success: false });
+            }
+            passport.authenticate("local")(req, res, () => {
+              res.json({ status: 200, success: true });
+            });
           });
         }
       }
@@ -42,46 +47,35 @@ export const signupUser = async (req, res, next) => {
 };
 
 export const loginUser = async (req, res, next) => {
-  try {
-    passport.authenticate("local", (err, user, info) => {
+  passport.authenticate("local", (err, user, info) => {
+    try {
       if (!user || err) {
-        res.json({
-          message: "Not logged in",
-          status: 404,
-          success: false,
-          err: err,
-          info: info,
-        });
+        throw new Error("Cannot Login");
       }
       req.login(user, (err) => {
         if (err) {
-          res.json({
-            message: "Not logged in",
-            status: 404,
-            success: false,
-            err: err,
-            info: info,
-          });
+          next(err);
         }
+        const token = getToken({ _id: req.user._id });
+        res.json({
+          message: "Logged in",
+          token: token,
+          success: true,
+          status: 200,
+          userId: req.user._id,
+          username: req.user.username,
+          admin: req.user.admin,
+        });
       });
-      const token = getToken({ _id: req.user._id });
-      res.json({
-        message: "Logged in",
-        token: token,
-        success: true,
-        status: 200,
-        userId: req.user._id,
-        username: req.user.username,
-        admin: req.user.admin
-      });
-    })(req, res, next);
-  } catch (error) {
-    next(error);
-  }
+    } catch (error) {
+      next(error);
+    }
+  })(req, res, next);
 };
 
 export const logoutUser = async (req, res, next) => {
   if (req.session) {
+    req.session.destroy();
     res.clearCookie("session-id");
     res.redirect("/");
   } else {
