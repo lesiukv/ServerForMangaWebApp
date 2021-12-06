@@ -22,28 +22,29 @@ export const getUser = async (req, res, next) => {
 };
 
 export const signupUser = async (req, res, next) => {
-  try {
-    Users.register(
-      new Users({ username: req.body.username }),
-      req.body.password,
-      (err, user) => {
+  Users.register(
+    new Users({ username: req.body.username }),
+    req.body.password,
+    (err, user) => {
+      try {
         if (err) {
-          res.json({ error: err, success: false });
+          throw new Error("Cannot register new user");
         } else {
           user.save((err, user) => {
             if (err) {
-              res.json({ error: err, success: false });
+              throw new Error("Cannot register new user");
+            } else {
+              passport.authenticate("local")(req, res, () => {
+                res.json({ status: 200, success: true });
+              });
             }
-            passport.authenticate("local")(req, res, () => {
-              res.json({ status: 200, success: true });
-            });
           });
         }
+      } catch (error) {
+        next(error);
       }
-    );
-  } catch (error) {
-    next(error);
-  }
+    }
+  );
 };
 
 export const loginUser = async (req, res, next) => {
