@@ -30,12 +30,12 @@ export const signupUser = async (req, res, next) => {
         if (err) {
           throw new Error("Cannot register new user");
         } else {
-          user.save((err, user) => {
+          user.save((err) => {
             if (err) {
               throw new Error("Cannot register new user");
             } else {
               passport.authenticate("local")(req, res, () => {
-                res.json({ status: 200, success: true });
+                res.status(200).json({ success: true });
               });
             }
           });
@@ -48,7 +48,7 @@ export const signupUser = async (req, res, next) => {
 };
 
 export const loginUser = async (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
+  passport.authenticate("local", (err, user) => {
     try {
       if (!user || err) {
         throw new Error("Cannot Login");
@@ -58,11 +58,10 @@ export const loginUser = async (req, res, next) => {
           next(err);
         }
         const token = getToken({ _id: req.user._id });
-        res.json({
+        res.status(200).json({
           message: "Logged in",
           token: token,
           success: true,
-          status: 200,
           userId: req.user._id,
           username: req.user.username,
           admin: req.user.admin,

@@ -1,5 +1,5 @@
 import postMessage from "../models/postMessage.js";
-import fs from "fs";
+import fs from "fs/promises";
 
 export const getPosts = async (req, res, next) => {
   try {
@@ -45,31 +45,31 @@ export const getPostDetails = async (req, res, next) => {
 };
 
 export const createPost = async (req, res, next) => {
-  let {
-    title,
-    parodie,
-    tags,
-    artists,
-    group,
-    language,
-    category,
-    characters,
-    pages,
-  } = req.body;
-
-  const newPostMessage = new postMessage({
-    title,
-    parodie,
-    tags,
-    artists,
-    group,
-    language,
-    category,
-    characters,
-    pages,
-  });
-
   try {
+    let {
+      title,
+      parodie,
+      tags,
+      artists,
+      group,
+      language,
+      category,
+      characters,
+      pages,
+    } = req.body;
+
+    const newPostMessage = new postMessage({
+      title,
+      parodie,
+      tags,
+      artists,
+      group,
+      language,
+      category,
+      characters,
+      pages,
+    });
+
     await newPostMessage.save();
     res.status(201).json(newPostMessage);
   } catch (error) {
@@ -83,11 +83,11 @@ export const deletePost = async (req, res, next) => {
     const { pages } = await postMessage.findById(id);
 
     for (const page of pages) {
-      fs.unlinkSync(`../uploads/${page.dest}`);
+      await fs.unlink(`../uploads/${page.dest}`);
     }
 
     await postMessage.findByIdAndDelete(id);
-    res.json("Post successfully deleted");
+    res.status(200).json("Post successfully deleted");
   } catch (error) {
     next(error);
   }
@@ -100,7 +100,7 @@ export const updatePost = async (req, res, next) => {
     const updatedPost = await postMessage.findByIdAndUpdate(id, updatedData, {
       new: true,
     });
-    res.json(updatedPost);
+    res.status(200).json(updatedPost);
   } catch (error) {
     next(error);
   }
